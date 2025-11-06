@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KALI-AI Cyber Sentinel</title>
+
+<style>
+    #splash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: black;
+      color: cyan;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 34px;
+      text-shadow: 0 0 20px cyan;
+      z-index: 9999;
+      transition: 1s ease-out;
+    }
+
+    body {
+      margin: 0;
+      background: #05050a;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 38px;
+      margin-top: 40px;
+      color: #00eaff;
+      text-shadow: 0 0 20px #00eaff;
+    }
+
+    .menu {
+      margin-top: 50px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .card {
+      width: 260px;
+      padding: 25px;
+      border-radius: 14px;
+      cursor: pointer;
+      background: rgba(0,255,255,0.07);
+      border: 2px solid #00eaff99;
+      backdrop-filter: blur(8px);
+      transition: 0.3s;
+      box-shadow: 0 0 12px #007f88;
+    }
+    .card:hover {
+      transform: scale(1.08);
+      box-shadow: 0 0 25px #00eaff;
+    }
+
+    .section {
+      display: none;
+      max-width: 600px;
+      margin: auto;
+      margin-top: 40px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 4px;
+      font-size: 15px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      background: #0e1a25;
+      color: cyan;
+      font-size: 14px;
+    }
+
+    .btn {
+      margin-top: 15px;
+      padding: 12px 22px;
+      background: #00eaff;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      border-radius: 6px;
+      color: #001f25;
+      transition: 0.2s;
+    }
+    .btn:hover { transform: scale(1.05); }
+
+    #result-box {
+      margin-top: 30px;
+      padding: 18px;
+      border-radius: 8px;
+      border-left: 4px solid #00eaff;
+      background: rgba(0,255,255,0.07);
+      display: none;
+      font-size: 16px;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="splash"><h1 id="welcome-text"></h1></div>
+
+<div id="main-content" style="display:none;">
+<h1>🔥 KALI AI CYBER SENTINEL 🔥</h1>
+
+<div class="menu">
+  <div class="card" onclick="showSection('url-section')">
+    <h2>🔗 URL Scanner</h2>
+    <p>Detect phishing websites</p>
+  </div>
+
+  <div class="card" onclick="showSection('email-section')">
+    <h2>📩 Email Scanner</h2>
+    <p>Analyze sender + body threats</p>
+  </div>
+
+  <div class="card" onclick="showSection('file-section')">
+    <h2>📂 File Scanner</h2>
+    <p>Detect malicious attachment</p>
+  </div>
+</div>
+
+<!-- URL SCANNER -->
+<div id="url-section" class="section">
+  <label>Enter URL</label>
+  <input id="urlInput" placeholder="https://example.com/login">
+  <button class="btn" onclick="scanURL()">Scan URL</button>
+</div>
+
+<!-- EMAIL SCANNER -->
+<div id="email-section" class="section">
+  <label>Sender Email</label>
+  <input id="emailSender" placeholder="hr@rnicrosoft.com">
+  <label>Subject</label>
+  <input id="emailSubject" placeholder="Your account will be suspended">
+  <label>Body</label>
+  <textarea id="emailBody" rows="6"></textarea>
+  <button class="btn" onclick="scanEmail()">Scan Email</button>
+</div>
+
+<!-- FILE SCANNER -->
+<div id="file-section" class="section">
+  <label>Upload File</label>
+  <input type="file" id="fileInput">
+  <button class="btn" onclick="scanFile()">Scan File</button>
+</div>
+
+<div id="result-box"></div>
+<button class="btn" onclick="explainThreat()">🔍 Explain This</button>
+<!-- ================= Guidance Files (Read / Copy / Download) ================= -->
+<div id="guidance-section" class="section" style="display:block; max-width:900px; margin:30px auto;">
+  <h2 style="color:#00eaff; margin-bottom:12px;">🛡️ Phishing Safety Guides</h2>
+
+  <div style="display:flex; gap:12px; flex-wrap:wrap;">
+    <!-- Guide 1 -->
+    <div class="card" style="flex:1; min-width:260px; background:rgba(0,0,0,0.35);">
+      <h3>1. Recognize Phishing Emails</h3>
+      <div style="color:var(--muted); font-size:14px; margin-top:6px;">
+        <div id="guide1Text">
+          • Look for unexpected urgency (e.g. "Act now", "Your account will be closed").<br>
+          • Check for spelling/grammar mistakes and odd greetings (no personal info).<br>
+          • Never click links without hovering to view the real URL.<br>
+          • Verify by contacting the company via official website/phone.
+        </div>
+      </div>
+      <div style="margin-top:10px; display:flex; gap:8px;">
+        <button class="btn" onclick="copyGuide('guide1Text')">Copy</button>
+        <button class="btn secondary" onclick="downloadGuide('Recognize-Phishing-Emails.txt','guide1Text')">Download .txt</button>
+      </div>
+    </div>
+
+    <!-- Guide 2 -->
+    <div class="card" style="flex:1; min-width:260px; background:rgba(0,0,0,0.35);">
+      <h3>2. Check Sender & Links</h3>
+      <div style="color:var(--muted); font-size:14px; margin-top:6px;">
+        <div id="guide2Text">
+          • Inspect sender address for lookalikes (e.g. rnicrosoft vs microsoft).<br>
+          • Hover links to see domain before clicking; avoid shortened/obscure links.<br>
+          • Confirm domain trust: official domains end with company TLD (.com, .gov) and not odd TLDs.<br>
+          • If unsure, open browser and manually type the site address.
+        </div>
+      </div>
+      <div style="margin-top:10px; display:flex; gap:8px;">
+        <button class="btn" onclick="copyGuide('guide2Text')">Copy</button>
+        <button class="btn secondary" onclick="downloadGuide('Check-Sender-Links.txt','guide2Text')">Download .txt</button>
+      </div>
+    </div>
+
+    <!-- Guide 3 -->
+    <div class="card" style="flex:1; min-width:260px; background:rgba(0,0,0,0.35);">
+      <h3>3. Handle Attachments Safely</h3>
+      <div style="color:var(--muted); font-size:14px; margin-top:6px;">
+        <div id="guide3Text">
+          • Never open unexpected attachments (especially .exe, .scr, .zip).<br>
+          • Scan attachments with antivirus before opening; upload to VirusTotal if unsure.<br>
+          • For documents, prefer viewing in a sandboxed viewer or request sender to share link instead.<br>
+          • Keep OS & apps updated and backup important data.
+        </div>
+      </div>
+      <div style="margin-top:10px; display:flex; gap:8px;">
+        <button class="btn" onclick="copyGuide('guide3Text')">Copy</button>
+        <button class="btn secondary" onclick="downloadGuide('Handle-Attachments-Safely.txt','guide3Text')">Download .txt</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Copy guide text to clipboard
+function copyGuide(elementId){
+  const el = document.getElementById(elementId);
+  if(!el) return;
+  const text = el.innerText || el.textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Guide copied to clipboard ✅");
+  }).catch(()=> {
+    alert("Copy failed — please select and copy manually.");
+  });
+}
+
+// Download guide as .txt file
+function downloadGuide(filename, elementId){
+  const el = document.getElementById(elementId);
+  if(!el) return;
+  const text = el.innerText || el.textContent;
+  const blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => {
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, 100);
+}
+</script>
+<!-- ================= End Guidance Files ================= -->
+
+</div>
+
+<script>
+const BASE = "http://127.0.0.1:8000";
+
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.style.display="none");
+  document.getElementById(id).style.display="block";
+}
+
+function displayResult(data){
+  const box = document.getElementById("result-box");
+  box.style.display = "block";
+  box.innerHTML = `
+    <strong style="color:#00eaff;">Result:</strong><br><br>
+    <span>Label:</span> ${data.label}<br>
+    <span>Score:</span> ${data.score}<br>
+    <span>Reason:</span> ${data.reason}<br>
+  `;
+  box.style.borderLeft = (data.label.toLowerCase()==="phishing" || data.label.toLowerCase()==="malicious")
+    ? "4px solid #ff3b3b" : "4px solid #00ff9d";
+    currentResult = data;
+
+}
+
+async function scanURL(){
+  const url = document.getElementById("urlInput").value;
+  const res = await fetch(`${BASE}/api/url/scan`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ url })
+  });
+  displayResult(await res.json());
+}
+
+async function scanEmail(){
+  const res = await fetch(`${BASE}/api/email/scan`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      sender: emailSender.value,
+      subject: emailSubject.value,
+      body: emailBody.value
+    })
+  });
+  displayResult(await res.json());
+}
+
+async function scanFile(){
+  const file = document.getElementById("fileInput").files[0];
+  const form = new FormData();
+  form.append("file", file);
+
+  const res = await fetch(`${BASE}/api/file/scan`, { method:"POST", body: form });
+  displayResult(await res.json());
+}
+
+// TYPEWRITER EFFECT
+const text = "Welcome to Kali AI Cyber Sentinel";
+let i = 0;
+
+function typeWriter(){
+  if(i < text.length){
+    document.getElementById("welcome-text").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeWriter, 70);
+  } else {
+    document.getElementById("splash").style.opacity = "0";
+    setTimeout(() => {
+      document.getElementById("splash").style.display = "none";
+      document.getElementById("main-content").style.display = "block";
+    }, 800);
+  }
+}
+
+typeWriter();
+async function explainThreat(){
+  const label = currentResult.label;
+  const reason = currentResult.reason;
+  const content = currentResult.content;
+
+  const res = await fetch(`${BASE}/api/ai/explain`, {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({ label, reason, content })
+  });
+
+  const data = await res.json();
+  alert("🧠 AI Explanation:\n\n" + data.explanation);
+}
+
+</script>
+
+</body>
+</html>
